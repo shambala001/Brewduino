@@ -149,30 +149,12 @@ void setup()
   lcd.createChar(5, tri_6);
   lcd.createChar(6, tri_7);
   lcd.createChar(7, tri_8);
-  lcd.setCursor(0,2);
-  lcd.write(byte(0));
-  lcd.setCursor(1,2);
-  lcd.write(byte(1));
-  lcd.setCursor(2,2);
-  lcd.write(byte(2));
-  lcd.setCursor(3,2);
-  lcd.write(byte(3));
-  lcd.setCursor(4,2);
-  lcd.write(byte(4));
-  lcd.setCursor(1,1);
-  lcd.write(byte(5));
-  lcd.setCursor(2,1);
-  lcd.write(byte(6));
-  lcd.setCursor(3,1);
-  lcd.write(byte(7));
-  lcd.setCursor(5,1);
-  lcd.print("Welcome to");
-  lcd.setCursor(6,2);
-  lcd.print("Brewduino");
+  logo();
 }
 
 
 void loop() {
+  sensors.requestTemperatures(); // Send the command to get temperatures
   if (irrecv.decode(&results)) { // have we received an IR signal?
     Serial.println(results.value, HEX);  //UN Comment to see raw values
     if (results.value == 0xD7E84B1B)
@@ -182,26 +164,7 @@ void loop() {
         delay(500);
         digitalWrite(blueled, LOW);
         lcd.clear();
-        lcd.setCursor(0,2);
-        lcd.write(byte(0));
-        lcd.setCursor(1,2);
-        lcd.write(byte(1));
-        lcd.setCursor(2,2);
-        lcd.write(byte(2));
-        lcd.setCursor(3,2);
-        lcd.write(byte(3));
-        lcd.setCursor(4,2);
-        lcd.write(byte(4));
-        lcd.setCursor(1,1);
-        lcd.write(byte(5));
-        lcd.setCursor(2,1);
-        lcd.write(byte(6));
-        lcd.setCursor(3,1);
-        lcd.write(byte(7));
-        lcd.setCursor(5,1);
-        lcd.print("Welcome to");
-        lcd.setCursor(6,2);
-        lcd.print("Brewduino");
+        logo();
         PrT1 = false;
         PrT2 = false;
         PrT3 = false;
@@ -291,41 +254,21 @@ void loop() {
     irrecv.resume(); // receive the next value
   }
   if (PrT1 == true) {
-    sensors.requestTemperatures(); // Send the command to get temperatures
-    lcd.setCursor(15,0);
-    printTemperature(Probe01);
-    lcd.setCursor(15,1);
-    printTemperature(Probe02);
-    lcd.setCursor(15,2);
-    printTemperature(Probe03);
-    lcd.setCursor(15,3);
-    printTemperature(Probe04);
-    delay(1000);
+    display1();
   }
   if (PrT2 == true) {
-    sensors.requestTemperatures(); // Send the command to get temperatures
-    lcd.setCursor(15,1);
-    printTemperature(Probe01);
-    delay(1000);
+    display2();
   }
   if (PrT3 == true) {
-    sensors.requestTemperatures(); // Send the command to get temperatures
-    lcd.setCursor(14,1);
-    printTemperature(Probe02);
-    delay(1000);
+    display3();
   }
   if (PrT4 == true) {
-    sensors.requestTemperatures(); // Send the command to get temperatures
-    lcd.setCursor(14,1);
-    printTemperature(Probe03);
-    delay(1000);
+    display4();
   }
   if (PrT5 == true) {
-    sensors.requestTemperatures(); // Send the command to get temperatures
-    lcd.setCursor(14,1);
-    printTemperature(Probe04);
-    delay(1000);
+    display5();
   }
+  delay(1000);
 }
 
 void printTemperature(DeviceAddress deviceAddress)
@@ -337,4 +280,64 @@ float tempC = sensors.getTempC(deviceAddress);
    {
    lcd.print(DallasTemperature::toFahrenheit(tempC));
    }
+}
+
+void logo()
+{
+  lcd.setCursor(0,2);
+  lcd.write(byte(0));
+  lcd.setCursor(1,2);
+  lcd.write(byte(1));
+  lcd.setCursor(2,2);
+  lcd.write(byte(2));
+  lcd.setCursor(3,2);
+  lcd.write(byte(3));
+  lcd.setCursor(4,2);
+  lcd.write(byte(4));
+  lcd.setCursor(1,1);
+  lcd.write(byte(5));
+  lcd.setCursor(2,1);
+  lcd.write(byte(6));
+  lcd.setCursor(3,1);
+  lcd.write(byte(7));
+  lcd.setCursor(5,1);
+  lcd.print("Welcome to");
+  lcd.setCursor(6,2);
+  lcd.print("Brewduino");
+}
+
+void display1()
+{
+  lcd.setCursor(15,0);
+  printTemperature(Probe01);
+  lcd.setCursor(15,1);
+  printTemperature(Probe02);
+  lcd.setCursor(15,2);
+  printTemperature(Probe03);
+  lcd.setCursor(15,3);
+  printTemperature(Probe04);
+}
+
+void display2()
+{
+  lcd.setCursor(15,1);
+  printTemperature(Probe01);
+}
+
+void display3()
+{
+  lcd.setCursor(14,1);
+  printTemperature(Probe02);
+}
+
+void display4()
+{
+  lcd.setCursor(14,1);
+  printTemperature(Probe03);
+}
+
+void display5()
+{
+  lcd.setCursor(14,1);
+  printTemperature(Probe04);
 }
